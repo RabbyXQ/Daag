@@ -44,16 +44,18 @@ model Land {
 
 }
 
-model Participator{
-  id      Int     @id @default(autoincrement())
-  name       String
-  relation String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  createdBy      String
-  updatedBy      String?
-  history        Json?
+model Participator {
+  id        Int      @id @default(autoincrement())
+  name      String
+  relation  String
+  portion   Int?     // Ensure this field exists
+  createdBy String
+  updatedBy String
+  history   Json?    // Assuming history is a JSON type or appropriate type
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
 
 
 model LandParticipator {
@@ -111,8 +113,8 @@ model Comment {
 
 model Connection{
   id          Int   @id @default(autoincrement())
-  follower String
-  folowed String
+  follower Int?
+  folowed Int?
 }
 
 

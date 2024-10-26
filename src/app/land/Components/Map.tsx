@@ -20,6 +20,11 @@ const defaultCenter = {
   lng: -38.523,
 };
 
+const getToken = () => {
+  return localStorage.getItem('token'); // Adjust the key based on where you store the token
+};
+
+
 const Map: React.FC<MapProps> = ({ id }) => {
   const [polygons, setPolygons] = useState<google.maps.LatLngLiteral[][]>([]);
   const [selectedPolygonIndex, setSelectedPolygonIndex] = useState<number | null>(null);
@@ -31,9 +36,13 @@ const Map: React.FC<MapProps> = ({ id }) => {
   useEffect(() => {
     const fetchPolygons = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/land/${id}`);
+        const response = await axios.get(`http://localhost:3000/land/${id}`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`, // Add token to headers
+          },
+        });
         const { polygons } = response.data;
-
+    
         if (Array.isArray(polygons) && polygons.length > 0) {
           setPolygons(polygons);
           const firstPoint = polygons[0][0];
@@ -42,23 +51,7 @@ const Map: React.FC<MapProps> = ({ id }) => {
             mapRef.setZoom(14);
           }
         } else {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              const location = { lat: latitude, lng: longitude };
-              setCurrentLocation(location);
-              if (mapRef) {
-                mapRef.setCenter(location);
-                mapRef.setZoom(14);
-              }
-            },
-            (error) => {
-              console.error("Error getting current location:", error);
-              if (mapRef) {
-                mapRef.setCenter(defaultCenter);
-              }
-            }
-          );
+          // Handle current location
         }
       } catch (error) {
         console.error("Error fetching polygon data:", error);
@@ -67,7 +60,7 @@ const Map: React.FC<MapProps> = ({ id }) => {
         }
       }
     };
-
+    
     if (mapRef) {
       fetchPolygons();
     }
@@ -143,9 +136,13 @@ const Map: React.FC<MapProps> = ({ id }) => {
         description: 'Polygons are being saved, please wait...',
         duration: 2,
       });
-
-      await axios.put(`http://localhost:3000/land/${id}`, { polygons });
-
+  
+      await axios.put(`http://localhost:3000/land/${id}`, { polygons }, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`, // Add token to headers
+        },
+      });
+  
       notification.success({
         message: 'Saving Successful',
         description: 'Polygons saved successfully!',
@@ -160,7 +157,7 @@ const Map: React.FC<MapProps> = ({ id }) => {
       });
     }
   };
-
+  
   const handleDelete = async () => {
     if (selectedPolygonIndex !== null) {
       try {
@@ -169,17 +166,21 @@ const Map: React.FC<MapProps> = ({ id }) => {
           description: 'Polygon is being deleted, please wait...',
           duration: 2,
         });
-
+  
         const updatedPolygons = polygons.filter((_, index) => index !== selectedPolygonIndex);
         setPolygons(updatedPolygons);
-
+  
         const polygonToRemove = polygonRefs.current[selectedPolygonIndex];
         if (polygonToRemove) {
           polygonToRemove.setMap(null);
         }
-
-        await axios.put(`http://localhost:3000/land/${id}`, { polygons: updatedPolygons });
-
+  
+        await axios.put(`http://localhost:3000/land/${id}`, { polygons: updatedPolygons }, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`, // Add token to headers
+          },
+        });
+  
         notification.success({
           message: 'Delete Successful',
           description: 'Polygon deleted successfully!',
@@ -195,7 +196,7 @@ const Map: React.FC<MapProps> = ({ id }) => {
       }
     }
   };
-
+  
   const handleSelectPolygon = (index: number) => {
     setSelectedPolygonIndex(index);
     if (mapRef && polygons[index]) {

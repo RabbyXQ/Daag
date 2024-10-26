@@ -1,6 +1,14 @@
 {
-  "/land/[id]/page": "app/land/[id]/page.js",
-  "/api/land/[id]/route": "app/api/land/[id]/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/participators/page": "app/participators/page.js",
+  "/connections/page": "app/connections/page.js",
+  "/user/[username]/page": "app/user/[username]/page.js",
+  "/profile/page": "app/profile/page.js",
   "/api/profile/route": "app/api/profile/route.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/api/user/[username]/route": "app/api/user/[username]/route.js",
+  "/api/participator/route": "app/api/participator/route.js",
+  "/land/page": "app/land/page.js",
+  "/api/land/route": "app/api/land/route.js",
+  "/land/[id]/page": "app/land/[id]/page.js",
+  "/api/land/[id]/route": "app/api/land/[id]/route.js"
 }

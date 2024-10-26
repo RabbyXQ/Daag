@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/macbook/Daag/src/app/layout\":[\"static/media/3b401319a061ecfc-s.p.woff2\",\"static/media/c2e6efaf026ea7b6-s.p.woff2\",\"static/media/a3a474206a856479-s.p.woff2\",\"static/media/1d15866986031c98-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
